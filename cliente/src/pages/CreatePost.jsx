@@ -95,7 +95,7 @@ const CreatePost = () => {
           <FormField
             LabeLName="Tu Nombre"
             type="texto"
-            name="nombre"
+            name="name"
             placeholder="John Doe"
             value={form.name}
             handLeChange={handleChange}
