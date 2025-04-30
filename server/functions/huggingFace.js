@@ -12,8 +12,8 @@ export async function generate(prompt) {
         // Generar imagen desde Hugging Face
         
         const response =  await inference.textToImage({
-             provider: "replicate",
-             model:"black-forest-labs/Flux.1-dev",
+             provider: "novita",
+             model:"meta-llama/llama-3.2-1b-instruct",
              inputs: prompt
          })
 
