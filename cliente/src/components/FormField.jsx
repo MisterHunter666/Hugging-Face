@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const FormField = ({
   LabeLName,
@@ -8,7 +8,8 @@ const FormField = ({
   value,
   handLeChange,
   isSurpriseMe,
-  handLeSurpriseMe
+  handLeSurpriseMe,
+  onKeyDown, 
 }) => {
   return (
     <div>
@@ -37,6 +38,7 @@ const FormField = ({
         placeholder={placeholder}
         value={value}
         onChange={handLeChange}
+        onKeyDown={onKeyDown} 
         required
         className="bg-gray-50 border border-gray-300 text-gray-900 
         text-sm rounded-lg focus:ring-[#4649ff] focus:border-
