@@ -1,35 +1,30 @@
-import * as dotenv from 'dotenv'; // Importa dotenv para manejar variables de entorno
-dotenv.config(); // Carga las variables definidas en .env
+import * as dotenv from 'dotenv';
+dotenv.config();
 
-// Función principal para generar una imagen usando la API de Stable Horde
+
 export async function generate(prompt) {
     try {
-        console.log("Prompt recibido:", prompt); // Muestra el prompt recibido
+        console.log("Prompt recibido:", prompt);
 
-        // Paso 1: Enviar el prompt a la API para iniciar la generación de la imagen
         const response = await fetch('https://stablehorde.net/api/v2/generate/async', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'accept': 'application/json',
-                'Client-Agent': 'unknown:0:unknown', // Identificación del cliente
-                'apikey': `${process.env.AIHORDE_API_KEY}` // Clave de API desde .env
+                'Client-Agent': 'unknown:0:unknown', 
+                'apikey': `${process.env.AIHORDE_API_KEY}` 
             },
-            body: JSON.stringify({ prompt: `${prompt}` }) // Cuerpo con el prompt a generar
+            body: JSON.stringify({ prompt: `${prompt}` }) 
         });
 
-        const data = await response.json(); // Respuesta con ID de la solicitud de una generación de imagen y otros datos
-        console.log(data); // Muestra el ID de generación y "kudos"
+        const data = await response.json(); 
 
-        // Paso 2: Polling para verificar si la imagen ya fue generada
-        let finished = false; // Bandera para saber si la generación terminó
-        let imageUrl = ''; // Donde se guardará la URL de la imagen generada
+        let finished = false; 
+        let imageUrl = ''; 
 
-        // Bucle de espera hasta que la imagen esté lista
         while (!finished) {
-            await new Promise(res => setTimeout(res, 3000)); // Espera 3 segundos antes de cada chequeo
+            await new Promise(res => setTimeout(res, 3000)); 
 
-            // Consultar el estado de la generación con el ID obtenido antes
             const check = await fetch(`https://stablehorde.net/api/v2/generate/check/${data.id}`, {
                 method: 'GET',
                 headers: {
@@ -38,11 +33,9 @@ export async function generate(prompt) {
                 }
             });
 
-            const resultcheck = await check.json(); // Parsear la respuesta del estado
-            //  accedo al valor de finished utilizaando result.finished   .
+            const resultcheck = await check.json(); 
 
-            // si result.finished es igual a 1 significa que la generación terminó.
-            if (resultcheck.finished == 1) {// Si la generación terminó...
+            if (resultcheck.finished == 1) {
         
                 
                 finished = true;
@@ -55,16 +48,14 @@ export async function generate(prompt) {
                     }
                 });
 
-                const resultstatus = await status.json(); // se parsea la solicitud http en formato json y se obrine el arreglo generations 
-                                                          // del cual está el valor de la url de la imagen
+                const resultstatus = await status.json(); 
 
-                // Verificamos que haya al menos una imagen generada
                 if (resultstatus.generations && resultstatus.generations.length > 0) {
-                    imageUrl = resultstatus.generations[0].img; // Guardamos la URL de la imagen
-                    console.log("Imagen generada:", imageUrl); // Mostramos la URL en consola
-                    return imageUrl; // Devolvemos la URL como resultado de la función
+                    imageUrl = resultstatus.generations[0].img; 
+                    console.log("Imagen generada:", imageUrl); 
+                    return imageUrl; 
                 } else {
-                    throw new Error("No se generó ninguna imagen"); // Error si no hay imagen
+                    throw new Error("No se generó ninguna imagen"); 
                 }
             } else {
                 if (resultcheck.processing == 1) {
@@ -80,7 +71,6 @@ export async function generate(prompt) {
             
         }
     } catch (error) {
-        // Captura y muestra cualquier error ocurrido en el proceso
         console.error("Error generating or uploading image:", error);
         throw error;
     }
