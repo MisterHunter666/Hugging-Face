@@ -16,11 +16,12 @@ const CreatePost = () => {
   const [loading, setLoading] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
-
+  console.log(apiUrl)
   const generateImage = async () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
+       
         const response = await fetch(`${apiUrl}/api/v1/dalle`, {
           method: 'POST',
           headers: {
