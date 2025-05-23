@@ -17,6 +17,7 @@ const CreatePost = () => {
 
   const apiUrl = import.meta.env.VITE_API_URL;
   console.log(apiUrl)
+  console.log(import.meta.env)
   const generateImage = async () => {
     if (form.prompt) {
       try {
