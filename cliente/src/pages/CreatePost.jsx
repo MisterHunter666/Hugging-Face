@@ -5,9 +5,6 @@ import { preview } from '../assets'
 import { getRandomPrompt } from '../utils'
 import { FormField, Loader } from '../components'
 
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 const CreatePost = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
