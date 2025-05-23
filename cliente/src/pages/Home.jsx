@@ -22,7 +22,7 @@ const Home = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `${REACT_APP_DALLE_FETCH_ROUTE}/api/v1/post?search=${encodeURIComponent(search)}&page=${pageNum}&limit=8`
+        `${process.env.REACT_APP_DALLE_FETCH_ROUTE}/api/v1/post?search=${encodeURIComponent(search)}&page=${pageNum}&limit=8`
       );
       const result = await response.json();
       if (response.ok) {
