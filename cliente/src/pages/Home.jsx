@@ -24,25 +24,16 @@ const Home = () => {
       const response = await fetch(
         `${process.env.REACT_APP_DALLE_FETCH_ROUTE}/api/v1/post?search=${encodeURIComponent(search)}&page=${pageNum}&limit=8`
       );
-
-      const text = await response.text();
-
-      if (!response.ok) {
-        throw new Error(`Error al obtener publicaciones: ${response.status}`);
+      const result = await response.json();
+      if (response.ok) {
+        setPosts(result.data);
+        setTotalPages(result.totalPages);
+        setPage(result.currentPage);
+      } else {
+        alert(result.message);
       }
-
-      let result;
-      try {
-        result = JSON.parse(text);
-      } catch (e) {
-        throw new Error('Respuesta inválida: no es JSON');
-      }
-
-      setPosts(result.data);
-      setTotalPages(result.totalPages);
-      setPage(result.currentPage);
     } catch (error) {
-      alert(`Error al buscar publicaciones: ${error.message}`);
+      alert(error.message);
     } finally {
       setLoading(false);
     }
@@ -68,7 +59,7 @@ const Home = () => {
         <h1 className="font-extrabold text-[#222328] text-[32px]">
           La Vitrina de la Comunidad
         </h1>
-        <p className="mt-2 text-[#666e75] text-[16px] max-w-[500px]">
+        <p className="mt-2 text-[#666e75] text-[16px] max-w [500px]">
           Navega a través de una colección de imágenes visualmente impresionantes generadas por Hugging Face AI
         </p>
       </div>
@@ -94,15 +85,18 @@ const Home = () => {
           <>
             {posts.length > 0 && (
               <h2 className="font-medium text-[#666e75] text-xl mb-3">
-                Mostrando resultados sobre{' '}
+                Mostrando resultados sobre{" "}
                 <span className="text-[#222328]">{searchText}</span>
               </h2>
             )}
-
             <div className="grid lg:grid-cols-4 sm:grid-cols-3 xs:grid-cols-2 grid-cols-1 gap-3">
-              <RenderCards data={posts} title="No se han encontrado publicaciones" />
+              <RenderCards
+                data={posts}
+                title="No se han encontrado publicaciones"
+              />
             </div>
 
+            {}
             {totalPages > 1 && (
               <div className="flex justify-center mt-6 space-x-2">
                 {Array.from({ length: totalPages }, (_, i) => (

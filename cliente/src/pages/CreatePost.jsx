@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { preview } from '../assets';
-import { getRandomPrompt } from '../utils';
-import { FormField, Loader } from '../components';
+import { preview } from '../assets'
+import { getRandomPrompt } from '../utils'
+import { FormField, Loader } from '../components'
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const CreatePost = () => {
   const [loading, setLoading] = useState(false);
 
   const generateImage = async () => {
-    if (form.prompt) {
+    if(form.prompt) {
       try {
         setGeneratingImg(true);
         const response = await fetch(`${process.env.REACT_APP_DALLE_FETCH_ROUTE}/api/v1/dalle`, {
@@ -25,36 +25,25 @@ const CreatePost = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ prompt: form.prompt }),
-        });
+        })
 
-        const text = await response.text();
+        const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(`Error en la generación de imagen: ${response.status}`);
-        }
-
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          throw new Error('Respuesta inválida: no es JSON');
-        }
-
-        setForm({ ...form, photo: data.photo });
+        setForm({ ...form, photo: `${data.photo}`})
       } catch (error) {
-        alert(`Error al generar imagen: ${error.message}`);
+        alert(error);
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert('Por favor ingresa un prompt');
+      alert('Please enter a prompt')
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (form.prompt && form.photo) {
+    if(form.prompt && form.photo) {
       setLoading(true);
 
       try {
@@ -63,48 +52,41 @@ const CreatePost = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(form),
-        });
+          body: JSON.stringify(form)
+        })
 
-        const text = await response.text();
-
-        if (!response.ok) {
-          throw new Error(`Error al compartir: ${response.status}`);
-        }
-
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (e) {
-          throw new Error('Respuesta inválida: no es JSON');
-        }
-
+        await response.json();
         navigate('/');
       } catch (err) {
-        alert(`Error al compartir la imagen: ${err.message}`);
+        alert(err)
       } finally {
         setLoading(false);
       }
     } else {
-      alert('Por favor, genera una imagen antes de compartir');
+      alert('Please enter a prompt and generate an image')
     }
-  };
+  }
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+    setForm({ ...form, [e.target.name]: e.target.value })
+  }
 
   const handleSurpriseMe = () => {
     const randomPrompt = getRandomPrompt(form.prompt);
-    setForm({ ...form, prompt: randomPrompt });
-  };
+    setForm({ ...form, prompt: randomPrompt })
+  }
 
   return (
     <section className="max-w-7xl mx-auto">
       <div>
-        <h1 className="font-extrabold text-[#222328] text-[32px]">Crear</h1>
-        <p className="mt-2 text-[#666e75] text-[16px] max-w-[500px]">
-          Crea imágenes visualmente impresionantes a través de Hugging Face AI y compártelas con la comunidad
+        <h1
+          className="font-extrabold text-[#222328] text-
+        [32px]"
+        >
+          Crear
+        </h1>
+        <p className="mt-2 text-[#666e75] text-[16px] max-w [500px]">
+        Crea imágenes visualmente impresionantes a través de Hugging Face AI y compártelas con la comunidad
         </p>
       </div>
 
@@ -129,7 +111,10 @@ const CreatePost = () => {
             handLeSurpriseMe={handleSurpriseMe}
           />
 
-          <div className="relative bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
+          <div
+            className="relative bg-gray-50 border border-gray-300 
+          text-gray-900 text-sm rounded-lg focus:ring-blue-500 
+          focus:border-blue-500 w-64 p-3 h-64 flex justify-center items-center">
             {form.photo ? (
               <img
                 src={form.photo}
@@ -145,7 +130,10 @@ const CreatePost = () => {
             )}
 
             {generatingImg && (
-              <div className="absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg">
+              <div
+                className="absolute inset-0 z-0 flex 
+              justify-center items-center bg-[rgba(0,0,0,0.5)]
+              rounded-lg">
                 <Loader />
               </div>
             )}
@@ -156,22 +144,25 @@ const CreatePost = () => {
           <button
             type="button"
             onClick={generateImage}
-            className="text-white bg-green-700 font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            className="text-white bg-green-700 font-medium 
+            rounded-md text-sm w-full sm:w-auto px-5 py-2.5 
+            text-center"
           >
             {generatingImg ? 'Generando...' : 'Generar'}
           </button>
         </div>
 
+
         <div className="mt-10">
-          <p className="mt-2 text-[#666e75] text-[14px]">
-            Una vez que hayas creado la imagen que deseas, puedes compartirla con otros en la comunidad
-          </p>
-          <button
-            type="submit"
-            className="mt-3 text-white bg-[#6469ff] font-medium rounded-md text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-          >
-            {loading ? 'Compartiendo...' : 'Comparte con la comunidad'}
-          </button>
+          <p className="mt-2 text-[#666e75] text-[14px]">Una vez que hayas creado la imagen que deseas, 
+            puedes compartirla con otros en la comunidad</p>
+            <button
+              type="submit"
+              className="mt-3 text-white bg-[#6469ff] font-medium rounded-md 
+              text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            >
+              {loading ? 'Compartiendo...' : 'Comparte con la comunidad'}
+            </button>
         </div>
       </form>
     </section>
