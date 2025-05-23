@@ -25,22 +25,18 @@ const CreatePost = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ prompt: form.prompt }),
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Error ${response.status}: ${errorText}`);
-        }
+        })
 
         const data = await response.json();
-        setForm({ ...form, photo: `${data.photo}` });
+
+        setForm({ ...form, photo: `${data.photo}` })
       } catch (error) {
-        alert(`Hubo un error al generar la imagen: ${error.message}`);
+        alert(error);
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert('Por favor, ingresa un prompt');
+      alert('Please enter a prompt')
     }
 
   }
