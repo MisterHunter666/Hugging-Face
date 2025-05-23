@@ -16,7 +16,7 @@ const CreatePost = () => {
   const [loading, setLoading] = useState(false);
 
   const generateImage = async () => {
-    if(form.prompt) {
+    if (form.prompt) {
       try {
         setGeneratingImg(true);
         const response = await fetch(`${process.env.REACT_APP_DALLE_FETCH_ROUTE}/api/v1/dalle`, {
@@ -25,25 +25,30 @@ const CreatePost = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({ prompt: form.prompt }),
-        })
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Error ${response.status}: ${errorText}`);
+        }
 
         const data = await response.json();
-
-        setForm({ ...form, photo: `${data.photo}`})
+        setForm({ ...form, photo: `${data.photo}` });
       } catch (error) {
-        alert(error);
+        alert(`Hubo un error al generar la imagen: ${error.message}`);
       } finally {
         setGeneratingImg(false);
       }
     } else {
-      alert('Please enter a prompt')
+      alert('Por favor, ingresa un prompt');
     }
+
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(form.prompt && form.photo) {
+    if (form.prompt && form.photo) {
       setLoading(true);
 
       try {
@@ -86,7 +91,7 @@ const CreatePost = () => {
           Crear
         </h1>
         <p className="mt-2 text-[#666e75] text-[16px] max-w [500px]">
-        Crea imágenes visualmente impresionantes a través de Hugging Face AI y compártelas con la comunidad
+          Crea imágenes visualmente impresionantes a través de Hugging Face AI y compártelas con la comunidad
         </p>
       </div>
 
@@ -154,15 +159,15 @@ const CreatePost = () => {
 
 
         <div className="mt-10">
-          <p className="mt-2 text-[#666e75] text-[14px]">Una vez que hayas creado la imagen que deseas, 
+          <p className="mt-2 text-[#666e75] text-[14px]">Una vez que hayas creado la imagen que deseas,
             puedes compartirla con otros en la comunidad</p>
-            <button
-              type="submit"
-              className="mt-3 text-white bg-[#6469ff] font-medium rounded-md 
+          <button
+            type="submit"
+            className="mt-3 text-white bg-[#6469ff] font-medium rounded-md 
               text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-            >
-              {loading ? 'Compartiendo...' : 'Comparte con la comunidad'}
-            </button>
+          >
+            {loading ? 'Compartiendo...' : 'Comparte con la comunidad'}
+          </button>
         </div>
       </form>
     </section>
