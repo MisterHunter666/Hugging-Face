@@ -15,7 +15,7 @@ const CreatePost = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const apiUrl = process.env.REACT_APP_DALLE_FETCH_ROUTE;
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const generateImage = async () => {
     if (form.prompt) {

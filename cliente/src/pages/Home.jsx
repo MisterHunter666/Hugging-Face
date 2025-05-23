@@ -18,7 +18,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const apiUrl = process.env.REACT_APP_DALLE_FETCH_ROUTE;
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const fetchPosts = async (search = '', pageNum = 1) => {
     setLoading(true);
