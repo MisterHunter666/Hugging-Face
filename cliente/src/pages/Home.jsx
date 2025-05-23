@@ -18,11 +18,13 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  const apiUrl = process.env.REACT_APP_DALLE_FETCH_ROUTE;
+
   const fetchPosts = async (search = '', pageNum = 1) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://dall-e-t4la.onrender.com/api/v1/post?search=${encodeURIComponent(search)}&page=${pageNum}&limit=8`
+        `${apiUrl}/api/v1/post?search=${encodeURIComponent(search)}&page=${pageNum}&limit=8`
       );
       const result = await response.json();
       if (response.ok) {

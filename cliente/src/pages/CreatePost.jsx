@@ -15,11 +15,13 @@ const CreatePost = () => {
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const apiUrl = process.env.REACT_APP_DALLE_FETCH_ROUTE;
+
   const generateImage = async () => {
     if (form.prompt) {
       try {
         setGeneratingImg(true);
-        const response = await fetch(`https://dall-e-t4la.onrender.com/api/v1/dalle`, {
+        const response = await fetch(`${apiUrl}/api/v1/dalle`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -48,7 +50,7 @@ const CreatePost = () => {
       setLoading(true);
 
       try {
-        const response = await fetch(`https://dall-e-t4la.onrender.com/api/v1/post`, {
+        const response = await fetch(`${apiUrl}/api/v1/post`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
